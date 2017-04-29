@@ -12,6 +12,7 @@ import org.jdatepicker.impl.*;
 import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.awt.event.*;
 
 /**
  *
@@ -19,7 +20,7 @@ import java.util.logging.Logger;
  */
 public class AlouetteGUI extends JFrame {
     public final int WIDTH = 1280, HEIGHT = 720;
-    public static final Font FONT = new Font("Serif", Font.PLAIN, 16);
+    public static final Font FONT = new Font("Serif", Font.PLAIN, 20);
     
     private final MTUList mtuList;
 
@@ -42,7 +43,45 @@ public class AlouetteGUI extends JFrame {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
         
+        JPanel satellitePanel = createTextPanel("Satellite: ");
+        searchPanel.add(satellitePanel);
+
+        JDatePickerImpl datePicker = createDateTimePicker();
+        
+        searchPanel.add(datePicker);
+        
+        JPanel stationPanel = createTextPanel("Station: ");
+        searchPanel.add(stationPanel);
+        
+        return searchPanel;
+    }
+    
+    private JPanel createTextPanel(String label) {
+        JPanel satellitePanel = new JPanel();
+        satellitePanel.setLayout(new BoxLayout(satellitePanel, BoxLayout.X_AXIS));
+        
+        JTextField satelliteTF = new JTextField();
+        satelliteTF.setAlignmentX(Component.LEFT_ALIGNMENT);
+        satelliteTF.setMaximumSize(new Dimension(satelliteTF.getMaximumSize().width, 40));
+        satelliteTF.setFont(FONT);
+        
+        JLabel satelliteLabel = new JLabel(label);
+        satelliteLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        satelliteLabel.setMaximumSize(new Dimension(satelliteLabel.getMaximumSize().width , 40));
+        satelliteLabel.setFont(FONT);
+        satelliteLabel.setLabelFor(satelliteTF);
+        
+        satellitePanel.add(satelliteLabel); 
+        satellitePanel.add(satelliteTF);
+        
+        return satellitePanel;
+    }
+    
+    private JDatePickerImpl createDateTimePicker() throws IOException {
         UtilCalendarModel model = new UtilCalendarModel();
+        model.setYear(1962);
+        model.setMonth(8);
+        model.setDay(29);
         
         //Localization
         Properties properties = new Properties();
@@ -58,9 +97,16 @@ public class AlouetteGUI extends JFrame {
         JDatePanelImpl startDatePanel = new JDatePanelImpl(model, properties);
         JDatePickerImpl datePicker = new JDatePickerImpl(startDatePanel, new DateTextFormatter());
         
-        searchPanel.add(datePicker);        
+        datePicker.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Calendar selectedValue = (Calendar) datePicker.getModel().getValue();
+                //System.out.println(selectedValue.toString());
+                //Date selectedDate = selectedValue.getTime();
+                //System.out.println(selectedDate.toString());
+            }
+        });
         
-        return searchPanel;
+        return datePicker;
     }
 
     private JPanel createMainPanel() {
