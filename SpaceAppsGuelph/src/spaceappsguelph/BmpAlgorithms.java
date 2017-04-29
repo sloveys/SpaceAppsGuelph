@@ -29,7 +29,7 @@ public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
     private static final int MetadataStartLine = 8600;
     private static final int JUMPSPEED = 7;
-    private static final int VALIDPIX = 2000;
+    private static final int VALIDPIX = 7000;
     private static final int MARGINOFERROR = 100;
     
     /**
@@ -91,8 +91,6 @@ public class BmpAlgorithms {
         return null;
     }
     
-    
-    
     /**
      * 
      * @return 
@@ -107,6 +105,7 @@ public class BmpAlgorithms {
                     pos[1] = j;
                     pos = calculateVolume(pos, image);
                     if (pos[1] != 0) {
+                        System.out.println(pos[0] + "," + pos[1]);
                         xys.add(pos);
                     }
                 }
@@ -133,7 +132,8 @@ public class BmpAlgorithms {
         while (!queue.isEmpty()) {
             Point p = queue.remove();
             //if we find a white pixel
-            if (p.x < 0 || p.x > image.getWidth() || p.y < 0 || p.y > image.getHeight())
+            if (p.x < 0 || p.x >= image.getWidth() || p.y < 0 || p.y >= image.getHeight())
+                continue;
             if (image.getRGB(p.x, p.y) != BLACK) {
                 if (p.x < minX) {
                     minX = p.x;

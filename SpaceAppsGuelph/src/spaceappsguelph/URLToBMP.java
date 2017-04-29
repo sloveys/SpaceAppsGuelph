@@ -22,4 +22,8 @@ public class URLToBMP {
             return null;
         }
     }
+    public static BufferedImage getBuffOfTiff(String tif) {
+        return null;
+    }
 }
+
