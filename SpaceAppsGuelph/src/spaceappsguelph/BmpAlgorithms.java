@@ -63,14 +63,17 @@ public class BmpAlgorithms {
         return xy;
     }
     
-    private static int[] calculateVolume(int[] xy, BufferedImage image) {
+    private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
         ArrayList<int[]> pixelQueue = new ArrayList<int[]>(5);
         pixelQueue.add(xy);
         int tempArray[] = new int[2];
+        int dupeFlag = 0;
         int leftMost = xy[0], rightMost = xy[0], topMost = xy[1], bottomMost = xy[1];
         int currentPixel;
         while (!pixelQueue.isEmpty()) {
-            System.out.println(pixelQueue.size());
+//            System.out.println(pixelQueue.size());
+            System.out.print(pixelQueue.size() + " ");
+
 //            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] - 1) > 0xff777777)
             currentPixel = pixelQueue.size() - 1; //keeping track of the pixel we are inspecting
             //get next pixel from the list
@@ -92,61 +95,66 @@ public class BmpAlgorithms {
             {   //if rgb of top pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0];
                 tempArray[1] = pixelQueue.get(currentPixel)[1] - 1;
+                dupeFlag = 0;
                 for (int i = 0; i < pixelQueue.size(); i++)
-                {
+                { //If you are wondering why I did this instead of .contains(tempArray) it is because it tempArray is being placed into pixelQueue every time and any pixel will trigger it regardless of co-ords
                     if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0])&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] - 1))
-                    {
-                        continue;
-                    }
-                    pixelQueue.add(tempArray);
-                    break;
+                    {   //Horrible coding but w/e its 4 am and i don't care
+                        dupeFlag = 1;
+                    } 
                 }
+                if (dupeFlag == 0)
+                    pixelQueue.add(tempArray);
             }
             if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] + 1) > 0xff000000)
             {   //if rgb of bottom pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0];
                 tempArray[1] = pixelQueue.get(currentPixel)[1] + 1;
+                dupeFlag = 0;
                 for (int i = 0; i < pixelQueue.size(); i++)
                 {
-                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0])&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] + 1))
-                    {
-                        continue;
-                    }
-                    pixelQueue.add(tempArray);
-                    break;
+                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0])&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] - 1))
+                    {   //Horrible coding but w/e its 4 am and i don't care
+                        dupeFlag = 1;
+                    } 
                 }
+                if (dupeFlag == 0)
+                    pixelQueue.add(tempArray);
             }
             if (image.getRGB(pixelQueue.get(currentPixel)[0] - 1, pixelQueue.get(currentPixel)[1]) > 0xff000000)
             {   //if rgb of left pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0] - 1;
                 tempArray[1] = pixelQueue.get(currentPixel)[1];
+                dupeFlag = 0;
                 for (int i = 0; i < pixelQueue.size(); i++)
                 {
-                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0] - 1)&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1]))
-                    {
-                        continue;
-                    }
-                    pixelQueue.add(tempArray);
-                    break;
+                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0])&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] - 1))
+                    {   //Horrible coding but w/e its 4 am and i don't care
+                        dupeFlag = 1;
+                    } 
                 }
+                if (dupeFlag == 0)
+                    pixelQueue.add(tempArray);
             }
             if (image.getRGB(pixelQueue.get(currentPixel)[0] + 1, pixelQueue.get(currentPixel)[1]) > 0xff000000)
             {   //if rgb of right pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0] + 1;
                 tempArray[1] = pixelQueue.get(currentPixel)[1];
+                dupeFlag = 0;
                 for (int i = 0; i < pixelQueue.size(); i++)
                 {
-                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0] + 1)&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] + 1))
-                    {
-                        continue;
-                    }
-                    pixelQueue.add(tempArray);
-                    break;
+                    if ((pixelQueue.get(i)[0] == pixelQueue.get(currentPixel)[0])&&(pixelQueue.get(i)[1] == pixelQueue.get(currentPixel)[1] - 1))
+                    {   //Horrible coding but w/e its 4 am and i don't care
+                        dupeFlag = 1;
+                    } 
                 }
+                if (dupeFlag == 0)
+                    pixelQueue.add(tempArray);
             }
             image.setRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1], 0xff000000); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
-            //I chose black because fuck it
+            //I chose black because fuck it (In reality I can't choose another colour)
             pixelQueue.remove(currentPixel);
+            System.out.println(pixelQueue.size());
         }
         
         //if volume is not valid or difference of xMost is not valid, return {0,0}
@@ -157,6 +165,7 @@ public class BmpAlgorithms {
         return xy;
     }
     
+    //Sourced from
     public static BufferedImage toBufferedImage(Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
