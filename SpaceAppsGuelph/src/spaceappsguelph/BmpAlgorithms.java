@@ -24,7 +24,7 @@ import javax.imageio.ImageIO;
 public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
     
-    private int metadataStartLine;
+    private static final int MetadataStartLine = 9000;
     
     /**
      * @param args the command line arguments
@@ -55,15 +55,12 @@ public class BmpAlgorithms {
         return null;
     } */
     
-    
-    
-    private int getMetadataStartLine() {
-        
-        return 0;
-    }
-    
-    private int[] getWhiteSpace(int[] xy) {
-        
+    /**
+     * 
+     * @return 
+     */
+    private int[] getWhiteSpace() {
+        int[] xy = {0,0};
         return xy;
     }
     
