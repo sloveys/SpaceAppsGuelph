@@ -45,6 +45,7 @@ public class BmpAlgorithms {
         temp[1] = 130 ;
         calculateVolume(temp, testBuff);
         File outputfile = new File("image.jpg");
+        System.out.println("central point: (" + temp[0] + ", " + temp[1] + ")");
         ImageIO.write(testBuff, "jpg", outputfile);
     }
     
@@ -69,6 +70,10 @@ public class BmpAlgorithms {
     
     private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
         int numPixels = 0;
+        int minX = xy[0];
+        int maxX = xy[0];
+        int minY = xy[1];
+        int maxY = xy[1];
         //queue of items to delete
         Queue<Point> queue = new LinkedList<>();
         if (image.getRGB(xy[0], xy[1]) == 0xff000000) {
@@ -82,6 +87,18 @@ public class BmpAlgorithms {
             Point p = queue.remove();
             //if we find a white pixel
             if (image.getRGB(p.x, p.y) != 0xff000000) {
+                if (p.x < minX) {
+                    minX = p.x;
+                }
+                if (p.x > maxX) {
+                    maxX = p.x;
+                }
+                if (p.y < minY) {
+                    minY = p.y;
+                }
+                if (p.y > maxY) {
+                    maxY = p.y;
+                }
                 image.setRGB(p.x, p.y, 0xff000000);
                 numPixels++;
                 //add adjacent pixels to check
@@ -91,6 +108,8 @@ public class BmpAlgorithms {
                 queue.add(new Point(p.x, p.y+1));
             }
         }
+        xy[0] = (minX + maxX) / 2;
+        xy[1] = (minY + maxY) / 2;
         System.out.println("number of white pixels: " + numPixels);
         return xy;
     }
