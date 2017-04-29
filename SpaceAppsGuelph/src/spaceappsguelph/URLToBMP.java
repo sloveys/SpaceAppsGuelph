@@ -13,7 +13,7 @@ import java.awt.image.BufferedImage;
  * @author Loveys
  */
 public class URLToBMP {
-    public BufferedImage getBuff(String url) {
+    public static BufferedImage getBuff(String url) {
         return null;
     }
 }
