@@ -23,8 +23,8 @@ import javax.imageio.ImageIO;
  */
 public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
-    
     private static final int MetadataStartLine = 9000;
+    private static final int JUMPSPEED = 10;
     
     /**
      * @param args the command line arguments
@@ -59,9 +59,20 @@ public class BmpAlgorithms {
      * 
      * @return 
      */
-    private int[] getWhiteSpace() {
-        int[] xy = {0,0};
-        return xy;
+    private ArrayList<int[]> getWhiteSpace(BufferedImage image) {
+        int[] pos = new int[2];
+        ArrayList<int[]> xys = new ArrayList<>(5);
+        for (int i = 0; i < image.getWidth(); i+=JUMPSPEED) {
+            for (int j=MetadataStartLine; j<image.getHeight(); j+=JUMPSPEED) {
+                if (image.getRGB(i, j) != BLACK) {
+                    pos[0] = i;
+                    pos[1] = j;
+                    pos = calculateVolume(pos, image);
+                    //...
+                }
+            }
+        }
+        return xys;
     }
     
     private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
