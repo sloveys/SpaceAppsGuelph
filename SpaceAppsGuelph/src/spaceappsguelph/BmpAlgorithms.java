@@ -66,15 +66,16 @@ public class BmpAlgorithms {
     private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
         ArrayList<int[]> pixelQueue = new ArrayList<>(5);
         pixelQueue.add(xy);
+        int l = 0, r = 0, t = 0, b = 0;
         int leftMost = xy[0], rightMost = xy[0], topMost = xy[1], bottomMost = xy[1];
         int currentPixel;
         while (!pixelQueue.isEmpty()) {
 //            System.out.println(pixelQueue.size());
-            System.out.print(pixelQueue.size() + " ");
             int tempArray[] = new int[2];
             int dupeFlag = 0;
 //            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] - 1) > 0xff777777)
-            currentPixel = pixelQueue.size() - 1; //keeping track of the pixel we are inspecting
+            currentPixel = 0; //keeping track of the pixel we are inspecting
+            System.out.print(pixelQueue.size());
             //get next pixel from the list
             if (pixelQueue.get(currentPixel)[0] < leftMost)
                 leftMost = pixelQueue.get(currentPixel)[0];
@@ -94,28 +95,29 @@ public class BmpAlgorithms {
             {   //if rgb of top pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0];
                 tempArray[1] = pixelQueue.get(currentPixel)[1] - 1;
-                attemptAdd(pixelQueue, tempArray);
+                t+=attemptAdd(pixelQueue, tempArray);
+                
             }
             dupeFlag = 0;
             if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] + 1) != 0xff000000)
             {   //if rgb of bottom pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0];
                 tempArray[1] = pixelQueue.get(currentPixel)[1] + 1;
-                attemptAdd(pixelQueue, tempArray);
+                b+=attemptAdd(pixelQueue, tempArray);
             }
             dupeFlag = 0;
             if (image.getRGB(pixelQueue.get(currentPixel)[0] - 1, pixelQueue.get(currentPixel)[1]) != 0xff000000)
             {   //if rgb of left pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0] - 1;
                 tempArray[1] = pixelQueue.get(currentPixel)[1];
-                attemptAdd(pixelQueue, tempArray);
+                l+=attemptAdd(pixelQueue, tempArray);
             }
             dupeFlag = 0;
             if (image.getRGB(pixelQueue.get(currentPixel)[0] + 1, pixelQueue.get(currentPixel)[1]) != 0xff000000)
             {   //if rgb of right pixel is valid then add to list
                 tempArray[0] = pixelQueue.get(currentPixel)[0] + 1;
                 tempArray[1] = pixelQueue.get(currentPixel)[1];
-                attemptAdd(pixelQueue, tempArray);
+                r+=attemptAdd(pixelQueue, tempArray);
             }
             image.setRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1], 0xff000000); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
             //I chose black because fuck it (In reality I can't choose another colour)
@@ -128,6 +130,7 @@ public class BmpAlgorithms {
         
         xy[0] = leftMost + (rightMost - leftMost)/2;
         xy[1] = topMost + (bottomMost - topMost)/2;
+        System.out.println(t + ", " + b + ", " + l + ", " + r);
         return xy;
     }
     
@@ -149,7 +152,7 @@ public class BmpAlgorithms {
         return bimage;
     }
     
-    static void attemptAdd(ArrayList<int[]> pixelQueue, int[] tempArray) {
+    static int attemptAdd(ArrayList<int[]> pixelQueue, int[] tempArray) {
         int dupeFlag = 0;
         for (int i = 0; i < pixelQueue.size(); i++)
         {
@@ -160,5 +163,6 @@ public class BmpAlgorithms {
         }
         if (dupeFlag == 0)
             pixelQueue.add(tempArray);
+        return dupeFlag;
     }
 }
