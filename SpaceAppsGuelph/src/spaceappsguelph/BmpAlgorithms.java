@@ -24,6 +24,8 @@ import javax.imageio.ImageIO;
 public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
     
+    private int metadataStartLine;
+    
     /**
      * @param args the command line arguments
      */
@@ -44,12 +46,9 @@ public class BmpAlgorithms {
         temp[0] = 105;
         temp[1] = 130 ;
         calculateVolume(temp, testBuff);
-        File outputfile = new File("image.jpg");
         System.out.println("central point: (" + temp[0] + ", " + temp[1] + ")");
-        ImageIO.write(testBuff, "jpg", outputfile);
     }
     
-    private int metadataStartLine;
     
     /*
     public MetadataToUrl masterAlgo(String bmp, String url) {
@@ -76,7 +75,7 @@ public class BmpAlgorithms {
         int maxY = xy[1];
         //queue of items to delete
         Queue<Point> queue = new LinkedList<>();
-        if (image.getRGB(xy[0], xy[1]) == 0xff000000) {
+        if (image.getRGB(xy[0], xy[1]) == BLACK) {
             System.out.println("error: started with a black spot");
             return xy;
         }
@@ -86,7 +85,7 @@ public class BmpAlgorithms {
         while (!queue.isEmpty()) {
             Point p = queue.remove();
             //if we find a white pixel
-            if (image.getRGB(p.x, p.y) != 0xff000000) {
+            if (image.getRGB(p.x, p.y) != BLACK) {
                 if (p.x < minX) {
                     minX = p.x;
                 }
@@ -99,7 +98,7 @@ public class BmpAlgorithms {
                 if (p.y > maxY) {
                     maxY = p.y;
                 }
-                image.setRGB(p.x, p.y, 0xff000000);
+                image.setRGB(p.x, p.y, BLACK);
                 numPixels++;
                 //add adjacent pixels to check
                 queue.add(new Point(p.x+1, p.y));
@@ -132,17 +131,4 @@ public class BmpAlgorithms {
         return bimage;
     }
     
-    static int attemptAdd(ArrayList<int[]> pixelQueue, int[] tempArray) {
-        int dupeFlag = 0;
-        for (int i = 0; i < pixelQueue.size(); i++)
-        {
-            if ((pixelQueue.get(i)[0] == tempArray[0])&&(pixelQueue.get(i)[1] == tempArray[1]))
-            {   //Horrible coding but w/e its 4 am and i don't care
-                dupeFlag = 1;
-            } 
-        }
-        if (dupeFlag == 0)
-            pixelQueue.add(tempArray);
-        return dupeFlag;
-    }
 }
