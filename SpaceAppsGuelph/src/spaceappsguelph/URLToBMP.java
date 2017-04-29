@@ -7,6 +7,12 @@
 package spaceappsguelph;
 
 import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -14,6 +20,10 @@ import java.awt.image.BufferedImage;
  */
 public class URLToBMP {
     public static BufferedImage getBuff(String url) {
-        return null;
+        try {
+            return ImageIO.read(new URL(url));
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }
