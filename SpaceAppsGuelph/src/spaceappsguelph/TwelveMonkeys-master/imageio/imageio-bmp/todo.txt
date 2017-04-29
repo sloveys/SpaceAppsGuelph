@@ -1,3 +1,0 @@
-Rework slightly:
- - BMPImageReader should work without Directory/DirectoryEntry!
- - ICO/CURImageReader could delegate individual reading to the BMPImageReader

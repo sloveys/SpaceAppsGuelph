@@ -1,4 +1,0 @@
-- Fix the crashes with "java.io.EOFException: Unexpected end of PackBits stream"
-- Fix the bugs with trashed images
-- Have a look at Werner Randelshofer's ANIM applet, maybe we can "borrow" the the ANIM support. :-)
-DONE:

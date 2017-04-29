@@ -1,3 +1,0 @@
-# Any line that does not resolve to a class name, will make registerApplicationClasspathSPIs throw error
-Bad, bad spi
-So bad. So bad.

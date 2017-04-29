@@ -1,1 +1,0 @@
-Implement a PDF ImageReader based on https://pdf-renderer.dev.java.net/
