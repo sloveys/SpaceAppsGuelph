@@ -41,8 +41,8 @@ public class BmpAlgorithms {
         temp[0] = 105;
         temp[1] = 130 ;
         calculateVolume(temp, testBuff);
-        File outputfile = new File("image.jpg");
-        ImageIO.write(testBuff, "jpg", outputfile);
+        File outputfile = new File("image.bmp");
+        ImageIO.write(testBuff, "bmp", outputfile);
     }
     
     private int metadataStartLine;
