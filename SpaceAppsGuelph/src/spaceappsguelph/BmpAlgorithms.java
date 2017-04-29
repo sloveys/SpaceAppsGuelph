@@ -17,6 +17,7 @@ import java.util.LinkedList;
 import java.util.Queue;
 import javax.imageio.ImageIO;
 
+
 /**
  *
  * @author Loveys
@@ -34,7 +35,7 @@ public class BmpAlgorithms {
         Image testImage = null;
         try
         {
-            testImage = ImageIO.read(new File("NUMBAHONE.bmp"));
+            testImage = ImageIO.read(new File("503Image0001.tif"));
         }
         catch (Exception e)
         {
@@ -43,10 +44,11 @@ public class BmpAlgorithms {
         }
         BufferedImage testBuff = toBufferedImage(testImage);
         int [] temp = new int [2];
-        temp[0] = 105;
-        temp[1] = 130 ;
+        temp[0] = 1280;
+        temp[1] = 1155;
         calculateVolume(temp, testBuff);
         System.out.println("central point: (" + temp[0] + ", " + temp[1] + ")");
+        ImageIO.write(testBuff, "tif", new File("image.tif"));
     }
     
     
