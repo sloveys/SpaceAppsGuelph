@@ -19,6 +19,7 @@ import javax.imageio.ImageIO;
  * @author Loveys
  */
 public class BmpAlgorithms {
+    private static final int BLACK = 0xff000000;
     
     /**
      * @param args the command line arguments
@@ -38,7 +39,7 @@ public class BmpAlgorithms {
         BufferedImage testBuff = toBufferedImage(testImage);
         int [] temp = new int [2];
         temp[0] = 105;
-        temp[1] = 70 ;
+        temp[1] = 130 ;
         calculateVolume(temp, testBuff);
         File outputfile = new File("image.jpg");
         ImageIO.write(testBuff, "jpg", outputfile);
@@ -66,62 +67,61 @@ public class BmpAlgorithms {
     private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
         ArrayList<int[]> pixelQueue = new ArrayList<>(5);
         pixelQueue.add(xy);
+        int[] holding;
         int l = 0, r = 0, t = 0, b = 0;
         int leftMost = xy[0], rightMost = xy[0], topMost = xy[1], bottomMost = xy[1];
         int currentPixel;
         while (!pixelQueue.isEmpty()) {
 //            System.out.println(pixelQueue.size());
             int tempArray[] = new int[2];
-            int dupeFlag = 0;
 //            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] - 1) > 0xff777777)
-            currentPixel = 0; //keeping track of the pixel we are inspecting
+            currentPixel = pixelQueue.size()-1; //keeping track of the pixel we are inspecting
+            holding = pixelQueue.get(currentPixel);
             System.out.print(pixelQueue.size());
             //get next pixel from the list
-            if (pixelQueue.get(currentPixel)[0] < leftMost)
-                leftMost = pixelQueue.get(currentPixel)[0];
+            if (holding[0] < leftMost)
+                leftMost = holding[0];
             //Check if current pixel is leftmost
-            if (pixelQueue.get(currentPixel)[0] > rightMost)
-                rightMost = pixelQueue.get(currentPixel)[0];
+            if (holding[0] > rightMost)
+                rightMost = holding[0];
             //Check if current pixel is rightmost
-            if (pixelQueue.get(currentPixel)[1] > bottomMost)
-                bottomMost = pixelQueue.get(currentPixel)[1];
+            if (holding[1] > bottomMost)
+                bottomMost = holding[1];
             //Check if current pixel is bottomMost
-            if (pixelQueue.get(currentPixel)[1] < topMost)
-                topMost = pixelQueue.get(currentPixel)[1];
+            if (holding[1] < topMost)
+                topMost = holding[1];
             //Check if current pixel is topmost
             
             //increase volume counter
-            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] - 1) != 0xff000000)
+            if (image.getRGB(holding[0], holding[1] - 1) != BLACK)
             {   //if rgb of top pixel is valid then add to list
-                tempArray[0] = pixelQueue.get(currentPixel)[0];
-                tempArray[1] = pixelQueue.get(currentPixel)[1] - 1;
+                tempArray[0] = holding[0];
+                tempArray[1] = holding[1] - 1;
                 t+=attemptAdd(pixelQueue, tempArray);
                 
             }
-            dupeFlag = 0;
-            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] + 1) != 0xff000000)
+            if (image.getRGB(holding[0], holding[1] + 1) != BLACK)
             {   //if rgb of bottom pixel is valid then add to list
-                tempArray[0] = pixelQueue.get(currentPixel)[0];
-                tempArray[1] = pixelQueue.get(currentPixel)[1] + 1;
+                tempArray[0] = holding[0];
+                tempArray[1] = holding[1] + 1;
                 b+=attemptAdd(pixelQueue, tempArray);
             }
-            dupeFlag = 0;
-            if (image.getRGB(pixelQueue.get(currentPixel)[0] - 1, pixelQueue.get(currentPixel)[1]) != 0xff000000)
+            if (image.getRGB(holding[0] - 1, holding[1]) != BLACK)
             {   //if rgb of left pixel is valid then add to list
-                tempArray[0] = pixelQueue.get(currentPixel)[0] - 1;
-                tempArray[1] = pixelQueue.get(currentPixel)[1];
+                tempArray[0] = holding[0] - 1;
+                tempArray[1] = holding[1];
                 l+=attemptAdd(pixelQueue, tempArray);
             }
-            dupeFlag = 0;
-            if (image.getRGB(pixelQueue.get(currentPixel)[0] + 1, pixelQueue.get(currentPixel)[1]) != 0xff000000)
+            if (image.getRGB(holding[0] + 1, holding[1]) != BLACK)
             {   //if rgb of right pixel is valid then add to list
-                tempArray[0] = pixelQueue.get(currentPixel)[0] + 1;
-                tempArray[1] = pixelQueue.get(currentPixel)[1];
+                tempArray[0] = holding[0] + 1;
+                tempArray[1] = holding[1];
                 r+=attemptAdd(pixelQueue, tempArray);
             }
-            image.setRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1], 0xff000000); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
+            image.setRGB(holding[0], holding[1], BLACK); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
             //I chose black because fuck it (In reality I can't choose another colour)
-            pixelQueue.remove(currentPixel);
+            System.out.print(", " + pixelQueue.size() + ", ");
+            pixelQueue.remove(holding);
             System.out.println(pixelQueue.size());
         }
         
