@@ -67,7 +67,7 @@ public class BmpAlgorithms {
     private static int[] calculateVolume(int[] xy, BufferedImage image) {   //Ask Alejandro if you have questions, Sam knows the logic pretty well too
         ArrayList<int[]> pixelQueue = new ArrayList<>(5);
         pixelQueue.add(xy);
-        int[] holding;
+        int[] activeXY;
         int l = 0, r = 0, t = 0, b = 0;
         int leftMost = xy[0], rightMost = xy[0], topMost = xy[1], bottomMost = xy[1];
         int currentPixel;
@@ -76,53 +76,52 @@ public class BmpAlgorithms {
             int tempArray[] = new int[2];
 //            if (image.getRGB(pixelQueue.get(currentPixel)[0], pixelQueue.get(currentPixel)[1] - 1) > 0xff777777)
             currentPixel = pixelQueue.size()-1; //keeping track of the pixel we are inspecting
-            holding = pixelQueue.get(currentPixel);
+            activeXY = pixelQueue.get(currentPixel);
             System.out.print(pixelQueue.size());
             //get next pixel from the list
-            if (holding[0] < leftMost)
-                leftMost = holding[0];
+            if (activeXY[0] < leftMost)
+                leftMost = activeXY[0];
             //Check if current pixel is leftmost
-            if (holding[0] > rightMost)
-                rightMost = holding[0];
+            if (activeXY[0] > rightMost)
+                rightMost = activeXY[0];
             //Check if current pixel is rightmost
-            if (holding[1] > bottomMost)
-                bottomMost = holding[1];
+            if (activeXY[1] > bottomMost)
+                bottomMost = activeXY[1];
             //Check if current pixel is bottomMost
-            if (holding[1] < topMost)
-                topMost = holding[1];
+            if (activeXY[1] < topMost)
+                topMost = activeXY[1];
             //Check if current pixel is topmost
             
             //increase volume counter
-            if (image.getRGB(holding[0], holding[1] - 1) != BLACK)
-            {   //if rgb of top pixel is valid then add to list
-                tempArray[0] = holding[0];
-                tempArray[1] = holding[1] - 1;
-                t+=attemptAdd(pixelQueue, tempArray);
-                
-            }
-            if (image.getRGB(holding[0], holding[1] + 1) != BLACK)
+            if (image.getRGB(activeXY[0], activeXY[1] + 1) != BLACK)
             {   //if rgb of bottom pixel is valid then add to list
-                tempArray[0] = holding[0];
-                tempArray[1] = holding[1] + 1;
+                tempArray[0] = activeXY[0];
+                tempArray[1] = activeXY[1] + 1;
                 b+=attemptAdd(pixelQueue, tempArray);
             }
-            if (image.getRGB(holding[0] - 1, holding[1]) != BLACK)
-            {   //if rgb of left pixel is valid then add to list
-                tempArray[0] = holding[0] - 1;
-                tempArray[1] = holding[1];
-                l+=attemptAdd(pixelQueue, tempArray);
-            }
-            if (image.getRGB(holding[0] + 1, holding[1]) != BLACK)
+            if (image.getRGB(activeXY[0] + 1, activeXY[1]) != BLACK)
             {   //if rgb of right pixel is valid then add to list
-                tempArray[0] = holding[0] + 1;
-                tempArray[1] = holding[1];
+                tempArray[0] = activeXY[0] + 1;
+                tempArray[1] = activeXY[1];
                 r+=attemptAdd(pixelQueue, tempArray);
             }
-            image.setRGB(holding[0], holding[1], BLACK); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
+            if (image.getRGB(activeXY[0], activeXY[1] - 1) != BLACK)
+            {   //if rgb of top pixel is valid then add to list
+                tempArray[0] = activeXY[0];
+                tempArray[1] = activeXY[1] - 1;
+                t+=attemptAdd(pixelQueue, tempArray);
+            }
+            if (image.getRGB(activeXY[0] - 1, activeXY[1]) != BLACK)
+            {   //if rgb of left pixel is valid then add to list
+                tempArray[0] = activeXY[0] - 1;
+                tempArray[1] = activeXY[1];
+                l+=attemptAdd(pixelQueue, tempArray);
+            }
+            image.setRGB(activeXY[0], activeXY[1], BLACK); //This marks the pixel as already looked at since it is less than grey (0xff777777) AKA it is black
             //I chose black because fuck it (In reality I can't choose another colour)
             System.out.print(", " + pixelQueue.size() + ", ");
-            pixelQueue.remove(holding);
-            System.out.println(pixelQueue.size());
+            pixelQueue.remove(activeXY);
+            System.out.println(activeXY[0] + "-" + activeXY[1]);
         }
         
         //if volume is not valid or difference of xMost is not valid, return {0,0}
@@ -130,7 +129,7 @@ public class BmpAlgorithms {
         
         xy[0] = leftMost + (rightMost - leftMost)/2;
         xy[1] = topMost + (bottomMost - topMost)/2;
-        System.out.println(t + ", " + b + ", " + l + ", " + r);
+        System.out.println("t:" + t + ", b:" + b + ", l:" + l + ", r:" + r);
         return xy;
     }
     
