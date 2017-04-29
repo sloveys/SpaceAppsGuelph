@@ -1,0 +1,17 @@
+sudo: false
+cache:
+  directories:
+    - "$HOME/.m2"
+language: java
+jdk:
+  - oraclejdk8
+  - oraclejdk7
+  - openjdk7
+script:
+  - mvn -B -T2 -fae clean install
+notifications:
+  email: false
+  on_failure: never
+after_success:
+ - mvn clean cobertura:cobertura coveralls:report
+ - python <(curl -s https://raw.githubusercontent.com/TouK/sputnik-ci/master/sputnik-ci.py)
