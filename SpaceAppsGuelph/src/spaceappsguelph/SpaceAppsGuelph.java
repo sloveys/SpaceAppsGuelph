@@ -6,6 +6,10 @@
 
 package spaceappsguelph;
 
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+
 /**
  *
  * @author Loveys
@@ -16,7 +20,12 @@ public class SpaceAppsGuelph {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        AlouetteGUI alouetteGUI;
+        try {
+            alouetteGUI = new AlouetteGUI();
+            alouetteGUI.setVisible(true);
+        } catch (IOException ex) {
+            Logger.getLogger(SpaceAppsGuelph.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
-    //WHY IS GIT BEING SO ANNOYING!!!!!!!!!!!!!!
 }
