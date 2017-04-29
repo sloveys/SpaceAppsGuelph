@@ -28,36 +28,56 @@ public class TimeStamp {
         this.second = second;
     }
     
+    public int getYear() {
+        return year;
+    }
+    
+    public int getDayOfYear() {
+        return dayOfYear;
+    }
+    
+    public int getHour() {
+        return hour;
+    }
+    
+    public int getMinute() {
+        return minute;
+    }
+    
+    public int getSecond() {
+        return second;
+    }
+    
     private boolean yearIsValid(int x) { // could use makeing this more specific
-        if (x<0) {
+        if (x < 0) {
             return false;
         }
         return true;
     }
     
     private boolean dayOfYearIsValid(int x) {
-        if (x<1 || x>365) {
+        if (x < 1 || x > 365) {
             return false;
         }
         return true;
     }
     
     private boolean hourIsValid(int x) {
-        if (x<1 || x>24) {
+        if (x < 1 || x > 24) {
             return false;
         }
         return true;
     }
     
     private boolean minuteIsValid(int x) {
-        if (x<1 || x>60) {
+        if (x < 1 || x > 60) {
             return false;
         }
         return true;
     }
     
     private boolean secondIsValid(int x) {
-        if (x<1 || x>60) {
+        if (x < 1 || x > 60) {
             return false;
         }
         return true;
