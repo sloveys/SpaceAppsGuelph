@@ -8,13 +8,16 @@ package spaceappsguelph;
 
 import java.awt.Graphics2D;
 import java.awt.Image;
+import static java.awt.JobAttributes.DestinationType.FILE;
 import java.awt.Point;
-import java.util.ArrayList;
 import java.awt.image.BufferedImage;
 import java.io.File;
-import java.io.IOException;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.imageio.ImageIO;
 
 
@@ -24,46 +27,77 @@ import javax.imageio.ImageIO;
  */
 public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
-    private static final int MetadataStartLine = 9000;
+    private static final int MetadataStartLine = 8600;
     private static final int JUMPSPEED = 7;
     private static final int VALIDPIX = 2000;
+    private static final int MARGINOFERROR = 100;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
         // testing main
-        Image testImage = null;
-        try
-        {
-            testImage = ImageIO.read(new File("503Image0001.tif"));
-        }
-        catch (Exception e)
-        {
-            System.out.println("File not found!");
-            System.exit(1);
-        }
-        BufferedImage testBuff = toBufferedImage(testImage);
-        int [] temp = new int [2];
-        temp[0] = 1280;
-        temp[1] = 1155;
-        calculateVolume(temp, testBuff);
-        System.out.println("central point: (" + temp[0] + ", " + temp[1] + ")");
-        ImageIO.write(testBuff, "tif", new File("image.tif"));
+        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0021.tif");
     }
     
     
     
-    public MetadataToURL masterAlgo(String bmp, String url) {
-        
+    public static MetadataToURL masterAlgo(String url) {
+        if (url.isEmpty())
+            return null;
+        BufferedImage image = URLToBMP.getBuff(url);
+        System.out.println("URL Downloaded");
+        if (image == null)
+            return null;
+        System.out.println("URL Valid");
+        try {
+            ImageIO.write(image, "tif", new File("ImageTesting.tif"));
+        } catch (IOException ex) {
+            Logger.getLogger(BmpAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ArrayList<int[]> xys = getWhiteSpaces(image);
+        if (xys.size() < 4)
+            return null;
+        System.out.println("Data Generated: ");
+        int[][][] dots = new int[4][13][2];
+        for (int[][] i : dots) {
+            for (int[] j : i) {
+                for (int k : j) {
+                    k = 0;
+                }
+            }
+        }
+        for (int[] i : xys) {
+            System.out.println(i[0] + ", " + i[1]);
+        }
+        try {
+            ImageIO.write(image, "tif", new File("ImageTesting2.tif"));
+        } catch (IOException ex) {
+            Logger.getLogger(BmpAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        // construct where the dots are located in binary (decimal rep.) position
+        // find top left 1;
+        /*
+        dots[0][0] = xys.get(0);
+        for (int[] i : xys) {
+            if (i[0] == 0 && i[1] == 0)
+                continue;
+            if (dots[0][0][0] < i[0] || dots[0][0][1] < i[1]) {
+                dots[0][0] = i;
+            }
+        }
+        xys.remove(dots[0][0]);
+        */
         return null;
     }
+    
+    
     
     /**
      * 
      * @return 
      */
-    private ArrayList<int[]> getWhiteSpaces(BufferedImage image) {
+    private static ArrayList<int[]> getWhiteSpaces(BufferedImage image) {
         int[] pos = new int[2];
         ArrayList<int[]> xys = new ArrayList<>(5);
         for (int i = 0; i < image.getWidth(); i+=JUMPSPEED) {
@@ -99,6 +133,7 @@ public class BmpAlgorithms {
         while (!queue.isEmpty()) {
             Point p = queue.remove();
             //if we find a white pixel
+            if (p.x < 0 || p.x > image.getWidth() || p.y < 0 || p.y > image.getHeight())
             if (image.getRGB(p.x, p.y) != BLACK) {
                 if (p.x < minX) {
                     minX = p.x;
@@ -123,7 +158,7 @@ public class BmpAlgorithms {
         }
         xy[0] = (minX + maxX) / 2;
         xy[1] = (minY + maxY) / 2;
-        System.out.println("number of white pixels: " + numPixels);
+        //System.out.println("number of white pixels: " + numPixels);
         if (numPixels < VALIDPIX) {
             xy[0] = 0;
             xy[1] = 0;
