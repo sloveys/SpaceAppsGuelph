@@ -11,15 +11,15 @@ package spaceappsguelph;
  * @author Loveys
  */
 public class TimeStamp {
-    private int year; // year zero is 1963
-    private int dayOfYear;
-    private int hour; // 24 hour format
-    private int minute;
-    private int second;
+    private final int year; // year zero is 1960 *****
+    private final int dayOfYear;
+    private final int hour; // 24 hour format
+    private final int minute;
+    private final int second;
     
     public TimeStamp(int year, int dayOfYear, int hour, int minute, int second) throws Exception {
-        if (!(yearIsValid(year) && ...)) {
-            throw new Exception("...");
+        if (!(yearIsValid(year) && dayOfYearIsValid(dayOfYear) && hourIsValid(hour) && minuteIsValid(minute) && secondIsValid(second))) {
+            throw new Exception("TimeStamp: Illegal time parameters.");
         }
         this.year = year;
         this.dayOfYear = dayOfYear;
@@ -28,8 +28,36 @@ public class TimeStamp {
         this.second = second;
     }
     
-    private boolean yearIsValid(int x) {
+    private boolean yearIsValid(int x) { // could use makeing this more specific
         if (x<0) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean dayOfYearIsValid(int x) {
+        if (x<1 || x>365) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean hourIsValid(int x) {
+        if (x<1 || x>24) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean minuteIsValid(int x) {
+        if (x<1 || x>60) {
+            return false;
+        }
+        return true;
+    }
+    
+    private boolean secondIsValid(int x) {
+        if (x<1 || x>60) {
             return false;
         }
         return true;
