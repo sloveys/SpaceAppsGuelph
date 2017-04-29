@@ -25,7 +25,8 @@ import javax.imageio.ImageIO;
 public class BmpAlgorithms {
     private static final int BLACK = 0xff000000;
     private static final int MetadataStartLine = 9000;
-    private static final int JUMPSPEED = 10;
+    private static final int JUMPSPEED = 7;
+    private static final int VALIDPIX = 2000;
     
     /**
      * @param args the command line arguments
@@ -52,16 +53,17 @@ public class BmpAlgorithms {
     }
     
     
-    /*
-    public MetadataToUrl masterAlgo(String bmp, String url) {
+    
+    public MetadataToURL masterAlgo(String bmp, String url) {
+        
         return null;
-    } */
+    }
     
     /**
      * 
      * @return 
      */
-    private ArrayList<int[]> getWhiteSpace(BufferedImage image) {
+    private ArrayList<int[]> getWhiteSpaces(BufferedImage image) {
         int[] pos = new int[2];
         ArrayList<int[]> xys = new ArrayList<>(5);
         for (int i = 0; i < image.getWidth(); i+=JUMPSPEED) {
@@ -70,7 +72,9 @@ public class BmpAlgorithms {
                     pos[0] = i;
                     pos[1] = j;
                     pos = calculateVolume(pos, image);
-                    //...
+                    if (pos[1] != 0) {
+                        xys.add(pos);
+                    }
                 }
             }
         }
@@ -120,6 +124,10 @@ public class BmpAlgorithms {
         xy[0] = (minX + maxX) / 2;
         xy[1] = (minY + maxY) / 2;
         System.out.println("number of white pixels: " + numPixels);
+        if (numPixels < VALIDPIX) {
+            xy[0] = 0;
+            xy[1] = 0;
+        }
         return xy;
     }
     
