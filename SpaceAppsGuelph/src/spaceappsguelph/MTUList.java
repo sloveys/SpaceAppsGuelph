@@ -14,4 +14,8 @@ import java.util.ArrayList;
  */
 public class MTUList {
     ArrayList<MetadataToURL> mtuArray;
+    
+    public MTUList() {
+        mtuArray = new ArrayList<>(5);
+    }
 }

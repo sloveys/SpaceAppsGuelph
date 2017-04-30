@@ -26,10 +26,10 @@ import javax.imageio.ImageIO;
  * @author Loveys
  */
 public class BmpAlgorithms {
-    private static final int BLACK = 0xff000000;
+    private static final int BLACK = 0xff111111;
     private static final int MetadataStartLine = 8600;
     private static final int JUMPSPEED = 7;
-    private static final int VALIDPIX = 7000;
+    private static final int VALIDPIX = 5000;
     private static final int MARGINOFERROR = 100;
     
     /**
@@ -37,10 +37,8 @@ public class BmpAlgorithms {
      */
     public static void main(String[] args) throws IOException {
         // testing main
-        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0021.tif");
+        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0121.tif");
     }
-    
-    
     
     public static MetadataToURL masterAlgo(String url) {
         if (url.isEmpty())
@@ -55,7 +53,8 @@ public class BmpAlgorithms {
         } catch (IOException ex) {
             Logger.getLogger(BmpAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
-        ArrayList<int[]> xys = getWhiteSpaces(image);
+        ArrayList<int[]> xys = new ArrayList<>(5);
+        getWhiteSpaces(image, xys);
         if (xys.size() < 4)
             return null;
         System.out.println("Data Generated: ");
@@ -95,17 +94,15 @@ public class BmpAlgorithms {
      * 
      * @return 
      */
-    private static ArrayList<int[]> getWhiteSpaces(BufferedImage image) {
-        int[] pos = new int[2];
-        ArrayList<int[]> xys = new ArrayList<>(5);
+    private static ArrayList<int[]> getWhiteSpaces(BufferedImage image, ArrayList<int[]> xys) {
         for (int i = 0; i < image.getWidth(); i+=JUMPSPEED) {
             for (int j=MetadataStartLine; j<image.getHeight(); j+=JUMPSPEED) {
-                if (image.getRGB(i, j) != BLACK) {
+                if (!isBlack(image.getRGB(i, j))) {
+                    int[] pos = new int[2];
                     pos[0] = i;
                     pos[1] = j;
                     pos = calculateVolume(pos, image);
                     if (pos[1] != 0) {
-                        System.out.println(pos[0] + "," + pos[1]);
                         xys.add(pos);
                     }
                 }
@@ -122,7 +119,7 @@ public class BmpAlgorithms {
         int maxY = xy[1];
         //queue of items to delete
         Queue<Point> queue = new LinkedList<>();
-        if (image.getRGB(xy[0], xy[1]) == BLACK) {
+        if (isBlack(image.getRGB(xy[0], xy[1]))) {
             System.out.println("error: started with a black spot");
             return xy;
         }
@@ -134,7 +131,7 @@ public class BmpAlgorithms {
             //if we find a white pixel
             if (p.x < 0 || p.x >= image.getWidth() || p.y < 0 || p.y >= image.getHeight())
                 continue;
-            if (image.getRGB(p.x, p.y) != BLACK) {
+            if (!isBlack(image.getRGB(p.x, p.y))) {
                 if (p.x < minX) {
                     minX = p.x;
                 }
@@ -184,4 +181,7 @@ public class BmpAlgorithms {
         return bimage;
     }
     
+    private static boolean isBlack(int rgb) {
+        return (rgb >= 0xff000000 && rgb < 0xff111111);
+    }
 }
