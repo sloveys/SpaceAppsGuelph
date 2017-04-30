@@ -96,4 +96,12 @@ public class TimeStamp {
         }
         return true;
     }
+    
+    public boolean equals(Object other) {
+        return this.year == year
+            && this.dayOfYear == dayOfYear
+            && this.hour == hour
+            && this.minute == minute
+            && this.second == second;
+    }
 }
