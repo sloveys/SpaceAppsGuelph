@@ -11,9 +11,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
+
 
 /**
  *
@@ -23,15 +24,15 @@ public class MTUList {
     private HashMap<Metadata, String> mtuMap;
     
     public MTUList() {
-        mtuMap = new HashMap<>(5);
+        mtuMap = new HashMap<>();
     }
     
-    public void add(Metadata mtu, String url) {
-        mtuMap.put(mtu, url);
+    public void add(Metadata mtd, String url) {
+        mtuMap.put(mtd, url);
     }
     
-    public String get(Metadata mtu) {
-        return mtuMap.get(mtu);
+    public String get(Metadata mtd) {
+        return mtuMap.get(mtd);
     }
     
     public void loadObj(String fileAddress) {
@@ -58,6 +59,18 @@ public class MTUList {
             fos.close();
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        }
+    }
+    
+    public ArrayList<String> searchUrls(int satellite, TimeStamp startDate, TimeStamp endDate, int station) {
+        Set<Metadata> keys = mtuMap.keySet();
+        ArrayList<String> urls = new ArrayList<>();
+        
+        for(Metadata i : keys) {
+            if(i.getTimeStamp().compareTo(startDate) >= 0 && i.getTimeStamp().compareTo(endDate) <= 0) {
+                String url = get(i);
+                urls.add(url);
+            }
         }
     }
     

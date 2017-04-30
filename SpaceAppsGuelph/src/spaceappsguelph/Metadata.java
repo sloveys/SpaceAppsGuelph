@@ -41,6 +41,10 @@ public class Metadata {
 //        return url;
 //    }
     
+    public TimeStamp getTimeStamp() {
+        return tStamp;
+    }
+    
     public int getYear() {
         return tStamp.getYear();
     }
