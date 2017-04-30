@@ -31,35 +31,32 @@ public class BmpAlgorithms {
     private static final int JUMPSPEED = 7;
     private static final int VALIDPIX = 5000;
     private static final int MARGINOFERROR = 75;
-    private static final int ROWDIF = 250;
-    private static final int COLDIF = 250;
+    private static final int ROWDIF = 268;
+    private static final int COLDIF = 240;
     
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) throws IOException {
         // testing main
-        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0121.tif");
+        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif");
     }
     
     public static MetadataToURL masterAlgo(String url) {
         if (url.isEmpty())
             return null;
         BufferedImage image = URLToBMP.getBuff(url);
-        System.out.println("URL Downloaded");
         if (image == null)
             return null;
-        System.out.println("URL Valid");
-        try {
+        /*try {
             ImageIO.write(image, "tif", new File("ImageTesting.tif"));
         } catch (IOException ex) {
             Logger.getLogger(BmpAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
-        }
+        }*/
         ArrayList<int[]> xys = new ArrayList<>(5);
         getWhiteSpaces(image, xys);
         if (xys.size() < 4)
             return null;
-        System.out.println("Data Generated: ");
         int[][][] dots = new int[4][13][2];
         for (int[][] i : dots) {
             for (int[] j : i) {
@@ -68,47 +65,124 @@ public class BmpAlgorithms {
                 }
             }
         }
-        for (int[] i : xys) {
-            System.out.println(i[0] + ", " + i[1]);
-        }
-        try {
+        /*try {
             ImageIO.write(image, "tif", new File("ImageTesting2.tif"));
         } catch (IOException ex) {
             Logger.getLogger(BmpAlgorithms.class.getName()).log(Level.SEVERE, null, ex);
         }
+        */
         // construct where the dots are located in binary (decimal rep.) position
         // find top left 1;
         
         dots[0][0] = xys.get(0);
-        for (int[] i : xys) {
+        /*for (int[] i : xys) {
             if (i[0] == 0 && i[1] == 0)
                 continue;
-            if (dots[0][0][0] < i[0] || dots[0][0][1] < i[1]) {
+            if (dots[0][0][0] > i[0] || dots[0][0][1] > i[1]) {
                 dots[0][0] = i;
             }
+        }*/
+        xys.remove(dots[0][0]);  // only true with sentnal one
+        int rowDif = ROWDIF;
+        int colDif = COLDIF;
+        for (int i = 1; i < 13; i++) {
+            for (int[] j : xys) {
+                if (dots[0][0][0] + (rowDif * i) + MARGINOFERROR > j[0] && dots[0][0][0] + (rowDif * i) - MARGINOFERROR < j[0]) {
+                    //System.out.println("rowDif at " + i + ": " + (rowDif = (j[0] - dots[0][0][0])/i));
+                    break;
+                }
+            }
         }
-        xys.remove(dots[0][0]);
+        for (int i = 1; i < 4; i++) {
+            for (int[] j : xys) {
+                if (dots[0][0][1] + (colDif * i) + MARGINOFERROR > j[1] && dots[0][0][1] + (colDif * i) - MARGINOFERROR < j[1]) {
+                    colDif = (j[1] - dots[0][0][1])/i;
+                    break;
+                }
+            } 
+        }
+        //System.out.println("rowDif: " + rowDif + ", colDif: " + colDif);
         // main loop to build points
-        for (int i = 0; i < 12; i++) {
-            for (int j = 0; j < 3; j++) {
+        for (int i = 0; i < 13; i++) {
+            for (int j = 0; j < 4; j++) {
                 if (i == 0 && j == 0) 
                     continue; // skip base condition
                 for (int[] k : xys) {
-                    if (comparePoints(dots[0][0], k, i, j)) {
-                        dots[i][j] = k;
+                    if (comparePoints(dots[0][0], k, i, rowDif, j, colDif)) {
+                        dots[j][i] = k;
                         xys.remove(k);
                         break;
                     }
                 }
             }
         }
-        
-        return null;
+        /*System.out.println("\nconstructed data:");
+        for (int i = 0; i < 4; i++) {
+            for (int j = 0; j < 13; j++) {
+                System.out.print((dots[i][j][1] != 0) + " - ");
+            }
+            System.out.println("");
+        }*/
+        int satellite = 0;
+        int year = 0;
+        int dayOfYear = 0;
+        int hour = 0;
+        int minute = 0;
+        int second = 0;
+        int station = 0;
+        for (int i = 0; i < 4; i++) {
+            if (dots[i][0][1] != 0) {
+                satellite += Math.pow(2,i);
+            }
+            if (dots[i][1][1] != 0) {
+                year += Math.pow(2,i);
+            }
+            if (dots[i][2][1] != 0) {
+                dayOfYear += Math.pow(2,i)*100;
+            }
+            if (dots[i][3][1] != 0) {
+                dayOfYear += Math.pow(2,i)*10;
+            }
+            if (dots[i][4][1] != 0) {
+                dayOfYear += Math.pow(2,i);
+            }
+            if (dots[i][5][1] != 0) {
+                hour += Math.pow(2,i)*10;
+            }
+            if (dots[i][6][1] != 0) {
+                hour += Math.pow(2,i);
+            }
+            if (dots[i][7][1] != 0) {
+                minute += Math.pow(2,i)*10;
+            }
+            if (dots[i][8][1] != 0) {
+                minute += Math.pow(2,i);
+            }
+            if (dots[i][9][1] != 0) {
+                second += Math.pow(2,i)*10;
+            }
+            if (dots[i][10][1] != 0) {
+                second += Math.pow(2,i);
+            }
+            if (dots[i][11][1] != 0) {
+                station += Math.pow(2,i)*10;
+            }
+            if (dots[i][12][1] != 0) {
+                station += Math.pow(2,i);
+            }
+        }
+        //System.out.println(satellite + ", " + station + ", " + url + ", " + year + ", " + dayOfYear + ", " + hour + ", " + minute + ", " + second);
+        try {
+            return new MetadataToURL(satellite, station, url, year, dayOfYear, hour, minute, second);
+        } catch (Exception e) {
+            System.err.println(e.getMessage());
+            return null;
+        }
     }
     
-    private static boolean comparePoints(int[] base, int[] target, int row, int col) {
-        return (base[0] + (row * ROWDIF) + MARGINOFERROR > target[0] && base[0] + (row * ROWDIF) - MARGINOFERROR < target[0] 
-                && base[1] + (col * COLDIF) + MARGINOFERROR > target[1] && base[1] + (row * ROWDIF) - MARGINOFERROR < target[1]);
+    private static boolean comparePoints(int[] base, int[] target, int row, int rowDif, int col, int colDif) {
+        return (base[0] + (row * rowDif) + MARGINOFERROR > target[0] && base[0] + (row * rowDif) - MARGINOFERROR < target[0] 
+                && base[1] + (col * colDif) + MARGINOFERROR > target[1] && base[1] + (col * colDif) - MARGINOFERROR < target[1]);
     }
     
     /**
@@ -184,7 +258,7 @@ public class BmpAlgorithms {
         return xy;
     }
     
-    //Sourced from
+    /*Sourced from
     public static BufferedImage toBufferedImage(Image img) {
         if (img instanceof BufferedImage) {
             return (BufferedImage) img;
@@ -200,7 +274,7 @@ public class BmpAlgorithms {
 
         // Return the buffered image
         return bimage;
-    }
+    }*/
     
     private static boolean isBlack(int rgb) {
         return (rgb >= 0xff000000 && rgb < 0xff111111);
