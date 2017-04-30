@@ -34,7 +34,6 @@ public class MTUList {
     }
     
     public void loadObj(String fileAddress) {
-        mtuArray = new ArrayList<>(5);
         try {
             FileInputStream fis = new FileInputStream(fileAddress);
             ObjectInputStream ois = new ObjectInputStream(fis);

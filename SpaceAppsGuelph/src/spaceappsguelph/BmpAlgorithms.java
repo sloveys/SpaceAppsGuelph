@@ -33,6 +33,7 @@ public class BmpAlgorithms {
     private static final int MARGINOFERROR = 75;
     private static final int ROWDIF = 268;
     private static final int COLDIF = 240;
+    private static final int PIXELLIM = 20000;
     
     /**
      * @param args the command line arguments
@@ -243,6 +244,11 @@ public class BmpAlgorithms {
                 }
                 image.setRGB(p.x, p.y, BLACK);
                 numPixels++;
+                if (numPixels > PIXELLIM) {
+                    xy[0] = 0;
+                    xy[1] = 0;
+                    return xy;
+                }
                 //add adjacent pixels to check
                 queue.add(new Point(p.x+1, p.y));
                 queue.add(new Point(p.x-1, p.y));
