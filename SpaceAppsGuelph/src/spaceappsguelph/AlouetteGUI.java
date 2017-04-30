@@ -99,9 +99,9 @@ public class AlouetteGUI extends JFrame {
                 int startHours = (int)startHoursSpinner.getValue();
                 int startMinutes = (int)startMinutesSpinner.getValue();
                 int startSeconds = (int)startSecondsSpinner.getValue();
-                
+                TimeStamp startTimeStamp = null;
                 try {
-                    TimeStamp startTimeStamp = new TimeStamp(startYear, startDayOfYear, startHours, startMinutes, startSeconds);
+                    startTimeStamp = new TimeStamp(startYear, startDayOfYear, startHours, startMinutes, startSeconds);
                 } catch (Exception ex) {
                     Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -113,19 +113,19 @@ public class AlouetteGUI extends JFrame {
                 int endHours = (int)endHoursSpinner.getValue();
                 int endMinutes = (int)endMinutesSpinner.getValue();
                 int endSeconds = (int)endSecondsSpinner.getValue();
-                
+                TimeStamp endTimeStamp = null;
                 try {
-                    TimeStamp timeStamp = new TimeStamp(endYear, endDayOfYear, endHours, endMinutes, endSeconds);
+                    endTimeStamp = new TimeStamp(endYear, endDayOfYear, endHours, endMinutes, endSeconds);
                 } catch (Exception ex) {
                     Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
                 
-                int sattelite;
+                int sattelite = 0;
                 if (satelliteBox.getSelectedItem().equals("Alouette"))
                 {
                     sattelite = 1;
                 }
-                int stationNum;
+                int stationNum = 0;
                 if (stationsBox.getSelectedItem().equals("Resolute Bay, NWT"))
                     stationNum = 1;
                 else if (stationsBox.getSelectedItem().equals("Prince Albert, AB"))
@@ -166,6 +166,15 @@ public class AlouetteGUI extends JFrame {
                     stationNum = 19;
                 else if (stationsBox.getSelectedItem().equals("Rosman, USA"))
                     stationNum = 20;
+                
+                ArrayList<String> urls = new ArrayList<>();
+                textArea.append("TESTING\n");
+                urls = mtuList.searchUrls(sattelite, startTimeStamp, endTimeStamp, stationNum);
+                for (String i : urls)
+                {
+                    textArea.append(i);
+                }
+                
             }
         });
         searchPanel.add(Box.createRigidArea(new Dimension(10, 15)));
