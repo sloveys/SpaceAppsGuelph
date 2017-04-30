@@ -22,7 +22,8 @@ import spaceappsguelph.TimeStamp;
 public class AlouetteGUI extends JFrame {
     public final int WIDTH = 1280, HEIGHT = 720;
     public static final Font FONT = new Font("Serif", Font.PLAIN, 20);
-    
+    private static final JTextArea textArea = new JTextArea(10, 30);
+
     private final MTUList mtuList;
 
     public AlouetteGUI() throws IOException {
@@ -37,14 +38,16 @@ public class AlouetteGUI extends JFrame {
         final JPanel mainPanel = createMainPanel();
         add(mainPanel, BorderLayout.CENTER);
         
-        final JPanel searchPanel = createSearchPanel();
-        add(searchPanel, BorderLayout.WEST);
-        
         final JPanel urlDisplay = createUrlPanel();
         add(urlDisplay, BorderLayout.EAST);
+        
+        final JPanel searchPanel = createSearchPanel(urlDisplay);
+        add(searchPanel, BorderLayout.WEST);
+        
+        
     }
     
-    private JPanel createSearchPanel() throws IOException {
+    private JPanel createSearchPanel(JPanel outputField) throws IOException {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
         JPanel satPanel = new JPanel();
@@ -185,11 +188,27 @@ public class AlouetteGUI extends JFrame {
         searchPanel.add(Box.createRigidArea(new Dimension(10, 15)));
 
         JButton addButton = new JButton("Add");
-        searchButton.setFont(FONT);
+        addButton.setFont(FONT);
         
-        searchButton.addActionListener(new ActionListener() {
+        addButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent f) {
-                BmpAlgorithms.masterAlgo(newUrl.getText());
+                if (newUrl.getText().isEmpty())
+                {
+                    textArea.append("Please input a URL\n");
+                    return;
+                }
+                else
+                    textArea.append("Processing...\n");
+                Metadata temp = BmpAlgorithms.masterAlgo(newUrl.getText());
+                if (temp == null)
+                {
+                    textArea.append("There was an error decoding that Ionograph, it is either corrupted or the URL is incorrect.\n");
+//                    textArea.setText("ballin");
+                }
+                else
+                {
+                    textArea.append("Ionograph successfully added to database.\n");
+                }
             }
         });
         
@@ -197,11 +216,11 @@ public class AlouetteGUI extends JFrame {
         searchPanel.add(Box.createRigidArea(new Dimension(10, 45)));
         
         JButton addFolderButton = new JButton("Add from Folder");
-        searchButton.setFont(FONT);
+        addFolderButton.setFont(FONT);
         
         addFolderButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent f) {
-                
+//                File folder = new File()
             }
         });
         
@@ -316,7 +335,6 @@ public class AlouetteGUI extends JFrame {
     private JPanel createUrlPanel() {
         JPanel urlPanel = new JPanel();
         urlPanel.setLayout(new FlowLayout());
-        JTextArea textArea = new JTextArea(10, 30);
         JScrollPane output = new JScrollPane(textArea);
         textArea.setEditable(false);
         add(output);
