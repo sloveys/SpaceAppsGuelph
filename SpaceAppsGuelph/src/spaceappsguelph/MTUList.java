@@ -11,6 +11,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Set;
@@ -20,7 +21,7 @@ import java.util.Set;
  *
  * @author Loveys
  */
-public class MTUList {
+public class MTUList implements Serializable {
     private HashMap<Metadata, String> mtuMap;
     
     public MTUList() {
@@ -60,6 +61,10 @@ public class MTUList {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
+    }
+    
+    public HashMap<Metadata, String> getMap() {
+        return mtuMap;
     }
     
     public ArrayList<String> searchUrls(int satellite, TimeStamp startDate, TimeStamp endDate, int station) {
