@@ -28,6 +28,7 @@ public class AlouetteGUI extends JFrame {
     public AlouetteGUI() throws IOException {
         super("Alouette Data Manager");
         setSize(WIDTH, HEIGHT);
+        setResizable(false);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
         
@@ -46,22 +47,37 @@ public class AlouetteGUI extends JFrame {
     private JPanel createSearchPanel() throws IOException {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
-        
+        JPanel satPanel = new JPanel();
+        satPanel.setLayout(new BorderLayout());
+        satPanel.setSize(10, 10);
+        JLabel satCombo = new JLabel("Satellite:");
+        satPanel.add(satCombo, BorderLayout.WEST);
+        searchPanel.add(satPanel);
         String [] satellites = {"Alouette"};
         JComboBox satelliteBox = new JComboBox(satellites);
         searchPanel.add(satelliteBox);
 //        JPanel satellitePanel = createTextPanel("Satellite: ");
 //        searchPanel.add(satellitePanel);
 
+        
+        
         JDatePickerImpl startDatePicker = null;
         JSpinner startHoursSpinner = null, startMinutesSpinner = null, startSecondsSpinner = null;
-        createDateTimePanel("Start Date and Time: ", searchPanel, startDatePicker, 
+        createDateTimePanel("Start Date and Time (Hour, Minute, Second): ", searchPanel, startDatePicker, 
                 startHoursSpinner, startMinutesSpinner, startSecondsSpinner);
         
         JDatePickerImpl endDatePicker = null;
         JSpinner endHoursSpinner = null, endMinutesSpinner = null, endSecondsSpinner = null;
-        createDateTimePanel("End Date and Time: ", searchPanel, endDatePicker,
+        createDateTimePanel("End Date and Time (Hour, Minute, Second): ", searchPanel, endDatePicker,
                 endHoursSpinner, endMinutesSpinner, endSecondsSpinner);
+        
+        
+        JPanel stationPanel = new JPanel();
+        stationPanel.setLayout(new BorderLayout());
+        stationPanel.setSize(10, 10);
+        JLabel stationCombo = new JLabel("Station:");
+        stationPanel.add(stationCombo, BorderLayout.WEST);
+        searchPanel.add(stationPanel);
         
         String [] stations = {"Resolute Bay, NWT","Prince Albert, AB","Ottawa, ON","St John's, NL","Fairbanks, USA","Fort Myers, USA","Quito, Ecuador","Antofagasta, Chile","Falkland Islands, UK","Winkfield, UK","Singapore, Malaysia","Woomera, AUS","Grand Forks, USA","Blossom Point, USA","South Point, USA","Johannesburg, SA","Mojave, USA","Winkfield, UK (2)","Fairbanks, USA (2)","Rosman, USA"};
         JComboBox stationsBox = new JComboBox(stations);
@@ -150,10 +166,47 @@ public class AlouetteGUI extends JFrame {
                     stationNum = 20;
             }
         });
-        
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 15)));
+   
         searchPanel.add(searchButton);
-        searchPanel.add(Box.createRigidArea(new Dimension(10, 160)));
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 60)));
+    
+        JPanel urlLabelPanel = new JPanel();
+        urlLabelPanel.setLayout(new BorderLayout());
+        urlLabelPanel.setSize(10, 10);
+        JLabel urlLabel = new JLabel("Add an Ionograph by URL");
+        urlLabelPanel.add(urlLabel, BorderLayout.WEST);
+        searchPanel.add(urlLabelPanel);
+        
+        
+        JTextField newUrl = new JTextField();
+        searchPanel.add(newUrl);
+        
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 15)));
 
+        JButton addButton = new JButton("Add");
+        searchButton.setFont(FONT);
+        
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent f) {
+                BmpAlgorithms.masterAlgo(newUrl.getText());
+            }
+        });
+        
+        searchPanel.add(addButton);
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 45)));
+        
+        JButton addFolderButton = new JButton("Add from Folder");
+        searchButton.setFont(FONT);
+        
+        addFolderButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent f) {
+                
+            }
+        });
+        
+        searchPanel.add(addFolderButton);
+        
         return searchPanel;
     }
     
