@@ -72,6 +72,7 @@ public class MTUList {
                 urls.add(url);
             }
         }
+        return urls;
     }
     
 }
