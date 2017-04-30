@@ -13,7 +13,6 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.*;
-import spaceappsguelph.TimeStamp;
 
 /**
  *
@@ -354,4 +353,24 @@ public class AlouetteGUI extends JFrame {
         return(urlPanel);
     }
     
+    private class manageMTtoUrlList extends WindowAdapter {
+        private String fileAddress;
+
+        public manageMTtoUrlList(String fileAddress) {
+            this.fileAddress = fileAddress;
+        }
+
+        @Override
+        public void windowOpened(WindowEvent e) {
+            mtuList.loadObj(fileAddress);
+            System.out.println("Successfully loaded prodcuts from file: " + fileAddress);
+        }
+
+        @Override
+        public void windowClosing(WindowEvent e) {
+            mtuList.saveObj(fileAddress);
+            System.out.println("Successfully saved prodcuts to file: " + fileAddress);
+        }
+    }
 }
+
