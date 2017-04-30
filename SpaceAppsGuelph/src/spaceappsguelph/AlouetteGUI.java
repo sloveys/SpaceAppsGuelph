@@ -46,9 +46,11 @@ public class AlouetteGUI extends JFrame {
         JPanel satellitePanel = createTextPanel("Satellite: ");
         searchPanel.add(satellitePanel);
 
-        JDatePickerImpl datePicker = createDateTimePicker();
+        JPanel startDateTimePanel = createDateTimePanel("Start Date and Time: ");
+        searchPanel.add(startDateTimePanel);
         
-        searchPanel.add(datePicker);
+        JPanel endDateTimePanel = createDateTimePanel("End Date and Time: ");
+        searchPanel.add(endDateTimePanel);
         
         JPanel stationPanel = createTextPanel("Station: ");
         searchPanel.add(stationPanel);
@@ -61,12 +63,10 @@ public class AlouetteGUI extends JFrame {
         satellitePanel.setLayout(new BoxLayout(satellitePanel, BoxLayout.X_AXIS));
         
         JTextField satelliteTF = new JTextField();
-        satelliteTF.setAlignmentX(Component.LEFT_ALIGNMENT);
         satelliteTF.setMaximumSize(new Dimension(satelliteTF.getMaximumSize().width, 40));
         satelliteTF.setFont(FONT);
         
-        JLabel satelliteLabel = new JLabel(label);
-        satelliteLabel.setAlignmentX(Component.LEFT_ALIGNMENT);
+        JLabel satelliteLabel = new JLabel(label, SwingConstants.LEFT);
         satelliteLabel.setMaximumSize(new Dimension(satelliteLabel.getMaximumSize().width , 40));
         satelliteLabel.setFont(FONT);
         satelliteLabel.setLabelFor(satelliteTF);
@@ -77,11 +77,14 @@ public class AlouetteGUI extends JFrame {
         return satellitePanel;
     }
     
-    private JDatePickerImpl createDateTimePicker() throws IOException {
-        UtilCalendarModel model = new UtilCalendarModel();
-        model.setYear(1962);
-        model.setMonth(8);
-        model.setDay(29);
+    private JPanel createDateTimePanel(String label) throws IOException {
+        JPanel datePanel = new JPanel();
+        datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
+        
+        UtilCalendarModel dateModel = new UtilCalendarModel();
+        dateModel.setYear(1962);
+        dateModel.setMonth(8);
+        dateModel.setDay(29);
         
         //Localization
         Properties properties = new Properties();
@@ -94,7 +97,7 @@ public class AlouetteGUI extends JFrame {
             Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
         
-        JDatePanelImpl startDatePanel = new JDatePanelImpl(model, properties);
+        JDatePanelImpl startDatePanel = new JDatePanelImpl(dateModel, properties);
         JDatePickerImpl datePicker = new JDatePickerImpl(startDatePanel, new DateTextFormatter());
         
         datePicker.addActionListener(new ActionListener() {
@@ -106,7 +109,56 @@ public class AlouetteGUI extends JFrame {
             }
         });
         
-        return datePicker;
+        JLabel dateLabel = new JLabel(label, SwingConstants.LEFT);
+        dateLabel.setMinimumSize(new Dimension(dateLabel.getMaximumSize().width , 40));
+        dateLabel.setFont(FONT);
+        dateLabel.setLabelFor(datePicker);
+        
+        JPanel timePanel = new JPanel();
+        timePanel.setLayout(new BoxLayout(timePanel, BoxLayout.X_AXIS));
+        
+        //Hours
+        SpinnerDateModel timeModel = new SpinnerDateModel();
+        timeModel.setCalendarField(Calendar.HOUR);
+        
+        JSpinner hoursSpinner = new JSpinner();
+        hoursSpinner.setModel(timeModel);
+        hoursSpinner.setEditor(new JSpinner.DateEditor(hoursSpinner, "kk"));
+        hoursSpinner.setPreferredSize(new Dimension(50 , hoursSpinner.getMinimumSize().height));
+        hoursSpinner.setMaximumSize(new Dimension(50 , 30));
+        hoursSpinner.setFont(FONT);
+        
+        //Minutes
+        timeModel = new SpinnerDateModel();
+        timeModel.setCalendarField(Calendar.MINUTE);
+        
+        JSpinner minutesSpinner = new JSpinner();
+        minutesSpinner.setModel(timeModel);
+        minutesSpinner.setEditor(new JSpinner.DateEditor(minutesSpinner, "mm"));
+        minutesSpinner.setPreferredSize(new Dimension(50 , minutesSpinner.getMinimumSize().height));
+        minutesSpinner.setMaximumSize(new Dimension(50 , 30));
+        minutesSpinner.setFont(FONT);
+        
+        //Seconds
+        timeModel = new SpinnerDateModel();
+        timeModel.setCalendarField(Calendar.SECOND);
+        
+        JSpinner secondsSpinner = new JSpinner();
+        secondsSpinner.setModel(timeModel);
+        secondsSpinner.setEditor(new JSpinner.DateEditor(secondsSpinner, "ss"));
+        secondsSpinner.setPreferredSize(new Dimension(50 , secondsSpinner.getMinimumSize().height));
+        secondsSpinner.setMaximumSize(new Dimension(50 , 30));
+        secondsSpinner.setFont(FONT);
+        
+        timePanel.add(hoursSpinner);
+        timePanel.add(minutesSpinner);
+        timePanel.add(secondsSpinner);
+        
+        datePanel.add(dateLabel);
+        datePanel.add(datePicker);
+        datePanel.add(timePanel);
+        
+        return datePanel;
     }
 
     private JPanel createMainPanel() {
