@@ -83,12 +83,14 @@ public class BmpAlgorithms {
             }
         }*/
         xys.remove(dots[0][0]);  // only true with sentnal one
+        //int tilt = 0;
         int rowDif = ROWDIF;
         int colDif = COLDIF;
         for (int i = 1; i < 13; i++) {
             for (int[] j : xys) {
                 if (dots[0][0][0] + (rowDif * i) + MARGINOFERROR > j[0] && dots[0][0][0] + (rowDif * i) - MARGINOFERROR < j[0]) {
-                    //System.out.println("rowDif at " + i + ": " + (rowDif = (j[0] - dots[0][0][0])/i));
+                    rowDif = (j[0] - dots[0][0][0])/i;
+                    //tilt = (j[1] - dots[0][0][1])/i;
                     break;
                 }
             }
@@ -116,13 +118,13 @@ public class BmpAlgorithms {
                 }
             }
         }
-        /*System.out.println("\nconstructed data:");
+        System.out.println("\nconstructed data:");
         for (int i = 0; i < 4; i++) {
             for (int j = 0; j < 13; j++) {
                 System.out.print((dots[i][j][1] != 0) + " - ");
             }
             System.out.println("");
-        }*/
+        }
         int satellite = 0;
         int year = 0;
         int dayOfYear = 0;
@@ -171,7 +173,7 @@ public class BmpAlgorithms {
                 station += Math.pow(2,i);
             }
         }
-        //System.out.println(satellite + ", " + station + ", " + url + ", " + year + ", " + dayOfYear + ", " + hour + ", " + minute + ", " + second);
+        System.out.println(satellite + ", " + station + ", " + url + ", " + year + ", " + dayOfYear + ", " + hour + ", " + minute + ", " + second);
         try {
             return new MetadataToURL(satellite, station, url, year, dayOfYear, hour, minute, second);
         } catch (Exception e) {
