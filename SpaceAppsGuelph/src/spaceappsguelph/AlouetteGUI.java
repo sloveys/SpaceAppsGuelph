@@ -101,6 +101,53 @@ public class AlouetteGUI extends JFrame {
                 } catch (Exception ex) {
                     Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
+                
+                int sattelite;
+                if (satelliteBox.getSelectedItem().equals("Alouette"))
+                {
+                    sattelite = 1;
+                }
+                int stationNum;
+                if (stationsBox.getSelectedItem().equals("Resolute Bay, NWT"))
+                    stationNum = 1;
+                else if (stationsBox.getSelectedItem().equals("Prince Albert, AB"))
+                    stationNum = 2;
+                else if (stationsBox.getSelectedItem().equals("Ottawa, ON"))
+                    stationNum = 3;
+                else if (stationsBox.getSelectedItem().equals("St John's, NL"))
+                    stationNum = 4;
+                else if (stationsBox.getSelectedItem().equals("Fairbanks, USA"))
+                    stationNum = 5;
+                else if (stationsBox.getSelectedItem().equals("Fort Myers, USA"))
+                    stationNum = 6;
+                else if (stationsBox.getSelectedItem().equals("Quito, Ecuador"))
+                    stationNum = 7;
+                else if (stationsBox.getSelectedItem().equals("Antofagasta, Chile"))
+                    stationNum = 8;
+                else if (stationsBox.getSelectedItem().equals("Falkland Islands, UK"))
+                    stationNum = 9;
+                else if (stationsBox.getSelectedItem().equals("Winkfield, UK"))
+                    stationNum = 10;
+                else if (stationsBox.getSelectedItem().equals("Singapore, Malaysia"))
+                    stationNum = 11;
+                else if (stationsBox.getSelectedItem().equals("Woomera, AUS"))
+                    stationNum = 12;
+                else if (stationsBox.getSelectedItem().equals("Grand Forks, USA"))
+                    stationNum = 13;
+                else if (stationsBox.getSelectedItem().equals("Blossom Point, USA"))
+                    stationNum = 14;
+                else if (stationsBox.getSelectedItem().equals("South Point, USA"))
+                    stationNum = 15;
+                else if (stationsBox.getSelectedItem().equals("Johannesburg, SA"))
+                    stationNum = 16;
+                else if (stationsBox.getSelectedItem().equals("Mojave, USA"))
+                    stationNum = 17;
+                else if (stationsBox.getSelectedItem().equals("Winkfield, UK (2)"))
+                    stationNum = 18;
+                else if (stationsBox.getSelectedItem().equals("Fairbanks, USA (2)"))
+                    stationNum = 19;
+                else if (stationsBox.getSelectedItem().equals("Rosman, USA"))
+                    stationNum = 20;
             }
         });
         
