@@ -19,32 +19,32 @@ public class BmpTransfer {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        /*
-        FileSeekableStream stream = new FileSeekableStream("sas");
-        TIFFDecodeParam decodeParam = new TIFFDecodeParam();
-        decodeParam.setDecodePaletteAsShorts(true);
-        ParameterBlock params = new ParameterBlock();
-        params.add(stream);
-        RenderedOp image1 = JAI.create("tiff", params);
-        BufferedImage img = image1.getAsBufferedImage();
-        
-        
-        
-        
-        
-        
-        URL tif;
-        try
-        {
-            tif = new URL("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0001.tif");
-        }
-        catch (Exception e)
-        {
-            System.out.println("boo!");
-        }
-        BufferedImage image = ;*/
-    }
+//    public static void main(String[] args) {
+//        /*
+//        FileSeekableStream stream = new FileSeekableStream("sas");
+//        TIFFDecodeParam decodeParam = new TIFFDecodeParam();
+//        decodeParam.setDecodePaletteAsShorts(true);
+//        ParameterBlock params = new ParameterBlock();
+//        params.add(stream);
+//        RenderedOp image1 = JAI.create("tiff", params);
+//        BufferedImage img = image1.getAsBufferedImage();
+//        
+//        
+//        
+//        
+//        
+//        
+//        URL tif;
+//        try
+//        {
+//            tif = new URL("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0001.tif");
+//        }
+//        catch (Exception e)
+//        {
+//            System.out.println("boo!");
+//        }
+//        BufferedImage image = ;*/
+//    }
     
     /*public static String convert (URL inputFile)
     {

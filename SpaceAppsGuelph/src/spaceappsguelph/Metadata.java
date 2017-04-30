@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Loveys
  */
-public class Metadata {
+public class Metadata implements Serializable {
     private final TimeStamp tStamp;
     private final int satellite;
     private final int station;

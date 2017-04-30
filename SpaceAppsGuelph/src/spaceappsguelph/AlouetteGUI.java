@@ -215,16 +215,29 @@ public class AlouetteGUI extends JFrame {
         searchPanel.add(addButton);
         searchPanel.add(Box.createRigidArea(new Dimension(10, 45)));
         
-        JButton addFolderButton = new JButton("Add from Folder");
-        addFolderButton.setFont(FONT);
-        
-        addFolderButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent f) {
-//                File folder = new File()
-            }
-        });
-        
-        searchPanel.add(addFolderButton);
+//        JButton addFolderButton = new JButton("Add from Folder");
+//        addFolderButton.setFont(FONT);
+//        
+//        addFolderButton.addActionListener(new ActionListener() {
+//            public void actionPerformed(ActionEvent f) {
+//                JFileChooser fileChooser = new JFileChooser();
+//                fileChooser.showOpenDialog(rootPane);
+//                File file = fileChooser.getSelectedFile();
+//                File [] ionos = file.listFiles();
+//                for (File i : ionos)
+//                {
+//                    Metadata temp = BmpAlgorithms.masterAlgo(i);
+//                    if (temp == null) {
+//                        textArea.append("There was an error decoding that Ionograph, it is either corrupted or the URL is incorrect.\n");
+////                    textArea.setText("ballin");
+//                    } else {
+//                        textArea.append("Ionograph successfully added to database.\n");
+//                    }
+//                }
+//            }
+//        });
+//        
+//        searchPanel.add(addFolderButton);
         
         return searchPanel;
     }

@@ -12,7 +12,7 @@ import java.io.Serializable;
  *
  * @author Loveys
  */
-public class TimeStamp {
+public class TimeStamp implements Serializable {
     private final int year; // year zero is 1960 *****
     private final int dayOfYear;
     private final int hour; // 24 hour format

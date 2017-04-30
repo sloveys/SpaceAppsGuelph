@@ -38,10 +38,17 @@ public class BmpAlgorithms {
     /**
      * @param args the command line arguments
      */
-//    public static void main(String[] args) throws IOException {
-//        // testing main
-//        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif");
-//    }
+    public static void main(String[] args) throws IOException {
+        String testFile = "testSave.ser";
+        String url = "ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif";
+        // testing main
+        MTUList mtul = new MTUList();
+        mtul.loadObj(testFile);
+        System.out.println(mtul.getMap().get(mtul.getMap().keySet().iterator().next()));
+        /*
+        mtul.add(masterAlgo(url), url);
+        mtul.saveObj(testFile);*/
+    }
     
     public static Metadata masterAlgo(String url) {
         if (url.isEmpty())
