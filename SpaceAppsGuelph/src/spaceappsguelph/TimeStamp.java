@@ -6,6 +6,8 @@
 
 package spaceappsguelph;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Loveys
