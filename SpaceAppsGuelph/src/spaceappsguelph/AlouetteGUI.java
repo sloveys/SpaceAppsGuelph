@@ -34,10 +34,13 @@ public class AlouetteGUI extends JFrame {
         mtuList = new MTUList();
         
         final JPanel mainPanel = createMainPanel();
-        add(mainPanel, BorderLayout.EAST);
+        add(mainPanel, BorderLayout.CENTER);
         
         final JPanel searchPanel = createSearchPanel();
         add(searchPanel, BorderLayout.WEST);
+        
+        final JPanel urlDisplay = createUrlPanel();
+        add(urlDisplay, BorderLayout.EAST);
     }
     
     private JPanel createSearchPanel() throws IOException {
@@ -203,5 +206,14 @@ public class AlouetteGUI extends JFrame {
         return mainPanel;
     }
     
+    private JPanel createUrlPanel() {
+        JPanel urlPanel = new JPanel();
+        urlPanel.setLayout(new FlowLayout());
+        JTextArea textArea = new JTextArea(10, 30);
+        JScrollPane output = new JScrollPane(textArea);
+        textArea.setEditable(false);
+        add(output);
+        return(urlPanel);
+    }
     
 }
