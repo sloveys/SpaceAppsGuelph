@@ -213,7 +213,7 @@ public class AlouetteGUI extends JFrame {
         
         searchPanel.add(addButton);
         searchPanel.add(Box.createRigidArea(new Dimension(10, 45)));
-        
+        //testing
 //        JButton addFolderButton = new JButton("Add from Folder");
 //        addFolderButton.setFont(FONT);
 //        
