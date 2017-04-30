@@ -30,7 +30,9 @@ public class BmpAlgorithms {
     private static final int MetadataStartLine = 8600;
     private static final int JUMPSPEED = 7;
     private static final int VALIDPIX = 5000;
-    private static final int MARGINOFERROR = 100;
+    private static final int MARGINOFERROR = 75;
+    private static final int ROWDIF = 250;
+    private static final int COLDIF = 250;
     
     /**
      * @param args the command line arguments
@@ -76,7 +78,7 @@ public class BmpAlgorithms {
         }
         // construct where the dots are located in binary (decimal rep.) position
         // find top left 1;
-        /*
+        
         dots[0][0] = xys.get(0);
         for (int[] i : xys) {
             if (i[0] == 0 && i[1] == 0)
@@ -86,8 +88,27 @@ public class BmpAlgorithms {
             }
         }
         xys.remove(dots[0][0]);
-        */
+        // main loop to build points
+        for (int i = 0; i < 12; i++) {
+            for (int j = 0; j < 3; j++) {
+                if (i == 0 && j == 0) 
+                    continue; // skip base condition
+                for (int[] k : xys) {
+                    if (comparePoints(dots[0][0], k, i, j)) {
+                        dots[i][j] = k;
+                        xys.remove(k);
+                        break;
+                    }
+                }
+            }
+        }
+        
         return null;
+    }
+    
+    private static boolean comparePoints(int[] base, int[] target, int row, int col) {
+        return (base[0] + (row * ROWDIF) + MARGINOFERROR > target[0] && base[0] + (row * ROWDIF) - MARGINOFERROR < target[0] 
+                && base[1] + (col * COLDIF) + MARGINOFERROR > target[1] && base[1] + (row * ROWDIF) - MARGINOFERROR < target[1]);
     }
     
     /**
@@ -102,7 +123,7 @@ public class BmpAlgorithms {
                     pos[0] = i;
                     pos[1] = j;
                     pos = calculateVolume(pos, image);
-                    if (pos[1] != 0) {
+                    if (pos[1] > MetadataStartLine && pos[0] < image.getWidth() - 150) { // second condition is a patchwork solution to filter out light bleading from the bottom right corner
                         xys.add(pos);
                     }
                 }
