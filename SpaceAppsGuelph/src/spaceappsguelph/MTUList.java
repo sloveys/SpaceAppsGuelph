@@ -13,31 +13,32 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  *
  * @author Loveys
  */
 public class MTUList {
-    private ArrayList<MetadataToURL> mtuArray;
+    private HashMap<Metadata, String> mtuMap;
     
     public MTUList() {
-        mtuArray = new ArrayList<>(5);
+        mtuMap = new HashMap<>(5);
     }
     
-    public void add(MetadataToURL mtu) {
-        mtuArray.add(mtu);
+    public void add(Metadata mtu, String url) {
+        mtuMap.put(mtu, url);
     }
     
-    public MetadataToURL get(int i) {
-        return mtuArray.get(i);
+    public String get(Metadata mtu) {
+        return mtuMap.get(mtu);
     }
     
     public void loadObj(String fileAddress) {
         try {
             FileInputStream fis = new FileInputStream(fileAddress);
             ObjectInputStream ois = new ObjectInputStream(fis);
-            mtuArray = (ArrayList) ois.readObject();
+            mtuMap = (HashMap<Metadata, String>) ois.readObject();
             ois.close();
             fis.close();
         } catch (IOException ioe) {
@@ -52,7 +53,7 @@ public class MTUList {
         try {
             FileOutputStream fos = new FileOutputStream(fileAddress);
             ObjectOutputStream oos = new ObjectOutputStream(fos);
-            oos.writeObject(mtuArray);
+            oos.writeObject(mtuMap);
             oos.close();
             fos.close();
         } catch (IOException ioe) {

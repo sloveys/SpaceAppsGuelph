@@ -12,21 +12,21 @@ import java.io.Serializable;
  *
  * @author Loveys
  */
-public class MetadataToURL {
+public class Metadata {
     private final TimeStamp tStamp;
     private final int satellite;
     private final int station;
-    private final String url;
+    //private final String url;
     
-    public MetadataToURL(int satellite, int station, String url, int year, int dayOfYear, int hour, int minute, int second) throws Exception {
-        if (!(satelliteIsValid(satellite) && stationIsValid(station) && urlIsValid(url))) {
+    public Metadata(int satellite, int station, int year, int dayOfYear, int hour, int minute, int second) throws Exception {
+        if (!(satelliteIsValid(satellite) && stationIsValid(station))) {
             throw new Exception("MetadataToURL: Illegal satellite, station, or URL.");
         }
         
         tStamp = new TimeStamp(year, dayOfYear, hour, minute, second);
         this.satellite = satellite;
         this.station = station;
-        this.url = url;
+        //this.url = url;
     }
     
     public int getSatellite() {
@@ -37,9 +37,9 @@ public class MetadataToURL {
         return station;
     }
     
-    public String getURL() {
-        return url;
-    }
+//    public String getURL() {
+//        return url;
+//    }
     
     public int getYear() {
         return tStamp.getYear();
@@ -74,10 +74,9 @@ public class MetadataToURL {
     }
     
     public boolean equals(Object other) {
-        MetadataToURL otherMtoU = (MetadataToURL)other;
+        Metadata otherMtoU = (Metadata)other;
         return tStamp.equals(otherMtoU.tStamp)
                 && satellite == otherMtoU.satellite
-                && station == otherMtoU.station
-                && url.equals(otherMtoU.url);
+                && station == otherMtoU.station;
     }
 }

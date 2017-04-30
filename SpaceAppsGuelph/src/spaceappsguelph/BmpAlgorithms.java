@@ -43,7 +43,7 @@ public class BmpAlgorithms {
         masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif");
     }
     
-    public static MetadataToURL masterAlgo(String url) {
+    public static Metadata masterAlgo(String url) {
         if (url.isEmpty())
             return null;
         BufferedImage image = URLToBMP.getBuff(url);
@@ -176,7 +176,7 @@ public class BmpAlgorithms {
         }
         System.out.println(satellite + ", " + station + ", " + url + ", " + year + ", " + dayOfYear + ", " + hour + ", " + minute + ", " + second);
         try {
-            return new MetadataToURL(satellite, station, url, year, dayOfYear, hour, minute, second);
+            return new Metadata(satellite, station, year, dayOfYear, hour, minute, second);
         } catch (Exception e) {
             System.err.println(e.getMessage());
             return null;
