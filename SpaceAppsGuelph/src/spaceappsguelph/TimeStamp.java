@@ -50,6 +50,18 @@ public class TimeStamp {
         return second;
     }
     
+    public static int yToyyyy(int year) {
+        if (year >= 2)
+            return (year + 1960);
+        return (year + 1970);
+    }
+    
+    public static int yyyyToy(int year) {
+        if (year >= 1970)
+            return (year - 1970);
+        return (year-1960);
+    }
+    
     private boolean yearIsValid(int x) { // could use makeing this more specific
         if (x < 0) {
             return false;
