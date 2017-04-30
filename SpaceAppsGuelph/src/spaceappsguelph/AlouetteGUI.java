@@ -13,6 +13,7 @@ import java.io.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.awt.event.*;
+import spaceappsguelph.TimeStamp;
 
 /**
  *
@@ -46,14 +47,55 @@ public class AlouetteGUI extends JFrame {
         JPanel satellitePanel = createTextPanel("Satellite: ");
         searchPanel.add(satellitePanel);
 
-        JPanel startDateTimePanel = createDateTimePanel("Start Date and Time: ");
-        searchPanel.add(startDateTimePanel);
+        JDatePickerImpl startDatePicker = null;
+        JSpinner startHoursSpinner = null, startMinutesSpinner = null, startSecondsSpinner = null;
+        createDateTimePanel("Start Date and Time: ", searchPanel, startDatePicker, 
+                startHoursSpinner, startMinutesSpinner, startSecondsSpinner);
         
-        JPanel endDateTimePanel = createDateTimePanel("End Date and Time: ");
-        searchPanel.add(endDateTimePanel);
+        JDatePickerImpl endDatePicker = null;
+        JSpinner endHoursSpinner = null, endMinutesSpinner = null, endSecondsSpinner = null;
+        createDateTimePanel("End Date and Time: ", searchPanel, endDatePicker,
+                endHoursSpinner, endMinutesSpinner, endSecondsSpinner);
         
         JPanel stationPanel = createTextPanel("Station: ");
         searchPanel.add(stationPanel);
+            
+        JButton searchButton = new JButton("Search");
+        searchButton.setFont(FONT);
+        
+        searchButton.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent e) {
+                Calendar startCalendarValue = (Calendar) startDatePicker.getModel().getValue();
+                
+                int startYear = startCalendarValue.get(Calendar.YEAR);
+                int startDayOfYear = startCalendarValue.get(Calendar.DAY_OF_YEAR);
+                int startHours = (int)startHoursSpinner.getValue();
+                int startMinutes = (int)startMinutesSpinner.getValue();
+                int startSeconds = (int)startSecondsSpinner.getValue();
+                
+                try {
+                    TimeStamp startTimeStamp = new TimeStamp(startYear, startDayOfYear, startHours, startMinutes, startSeconds);
+                } catch (Exception ex) {
+                    Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            
+                Calendar endCalendarValue = (Calendar) endDatePicker.getModel().getValue();
+                
+                int endYear = endCalendarValue.get(Calendar.YEAR);
+                int endDayOfYear = endCalendarValue.get(Calendar.DAY_OF_YEAR);
+                int endHours = (int)endHoursSpinner.getValue();
+                int endMinutes = (int)endMinutesSpinner.getValue();
+                int endSeconds = (int)endSecondsSpinner.getValue();
+                
+                try {
+                    TimeStamp timeStamp = new TimeStamp(endYear, endDayOfYear, endHours, endMinutes, endSeconds);
+                } catch (Exception ex) {
+                    Logger.getLogger(AlouetteGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
+        
+        searchPanel.add(searchButton);
         
         return searchPanel;
     }
@@ -77,7 +119,8 @@ public class AlouetteGUI extends JFrame {
         return satellitePanel;
     }
     
-    private JPanel createDateTimePanel(String label) throws IOException {
+    private JPanel createDateTimePanel(String label, JPanel outerPanel, JDatePickerImpl datePicker,
+        JSpinner hoursSpinner, JSpinner minutesSpinner, JSpinner secondsSpinner) throws IOException {
         JPanel datePanel = new JPanel();
         datePanel.setLayout(new BoxLayout(datePanel, BoxLayout.Y_AXIS));
         
@@ -98,16 +141,7 @@ public class AlouetteGUI extends JFrame {
         }
         
         JDatePanelImpl startDatePanel = new JDatePanelImpl(dateModel, properties);
-        JDatePickerImpl datePicker = new JDatePickerImpl(startDatePanel, new DateTextFormatter());
-        
-        datePicker.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                Calendar selectedValue = (Calendar) datePicker.getModel().getValue();
-                //System.out.println(selectedValue.toString());
-                //Date selectedDate = selectedValue.getTime();
-                //System.out.println(selectedDate.toString());
-            }
-        });
+        datePicker = new JDatePickerImpl(startDatePanel, new DateTextFormatter());
         
         JLabel dateLabel = new JLabel(label, SwingConstants.LEFT);
         dateLabel.setMinimumSize(new Dimension(dateLabel.getMaximumSize().width , 40));
@@ -121,7 +155,7 @@ public class AlouetteGUI extends JFrame {
         SpinnerDateModel timeModel = new SpinnerDateModel();
         timeModel.setCalendarField(Calendar.HOUR);
         
-        JSpinner hoursSpinner = new JSpinner();
+        hoursSpinner = new JSpinner();
         hoursSpinner.setModel(timeModel);
         hoursSpinner.setEditor(new JSpinner.DateEditor(hoursSpinner, "kk"));
         hoursSpinner.setPreferredSize(new Dimension(50 , hoursSpinner.getMinimumSize().height));
@@ -132,7 +166,7 @@ public class AlouetteGUI extends JFrame {
         timeModel = new SpinnerDateModel();
         timeModel.setCalendarField(Calendar.MINUTE);
         
-        JSpinner minutesSpinner = new JSpinner();
+        minutesSpinner = new JSpinner();
         minutesSpinner.setModel(timeModel);
         minutesSpinner.setEditor(new JSpinner.DateEditor(minutesSpinner, "mm"));
         minutesSpinner.setPreferredSize(new Dimension(50 , minutesSpinner.getMinimumSize().height));
@@ -143,7 +177,7 @@ public class AlouetteGUI extends JFrame {
         timeModel = new SpinnerDateModel();
         timeModel.setCalendarField(Calendar.SECOND);
         
-        JSpinner secondsSpinner = new JSpinner();
+        secondsSpinner = new JSpinner();
         secondsSpinner.setModel(timeModel);
         secondsSpinner.setEditor(new JSpinner.DateEditor(secondsSpinner, "ss"));
         secondsSpinner.setPreferredSize(new Dimension(50 , secondsSpinner.getMinimumSize().height));
@@ -153,12 +187,14 @@ public class AlouetteGUI extends JFrame {
         timePanel.add(hoursSpinner);
         timePanel.add(minutesSpinner);
         timePanel.add(secondsSpinner);
-        
+
         datePanel.add(dateLabel);
         datePanel.add(datePicker);
         datePanel.add(timePanel);
         
-        return datePanel;
+        outerPanel.add(datePanel);
+        
+        return datePicker;
     }
 
     private JPanel createMainPanel() {
