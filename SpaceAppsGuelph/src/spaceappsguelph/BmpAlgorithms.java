@@ -37,10 +37,10 @@ public class BmpAlgorithms {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws IOException {
-        // testing main
-        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif");
-    }
+//    public static void main(String[] args) throws IOException {
+//        // testing main
+//        masterAlgo("ftp://ftp.asc-csa.gc.ca/users/OpenData_DonneesOuvertes/pub/AlouetteData/500/Image0115.tif");
+//    }
     
     public static MetadataToURL masterAlgo(String url) {
         if (url.isEmpty())
