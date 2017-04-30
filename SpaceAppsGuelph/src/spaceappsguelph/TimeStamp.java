@@ -50,6 +50,31 @@ public class TimeStamp {
         return second;
     }
     
+    public int compareTo(TimeStamp cmp) {
+        if (this.getYear() < cmp.getYear())
+            return -1;
+        if (this.getYear() > cmp.getYear())
+            return 1;
+        if (this.getDayOfYear() < cmp.getDayOfYear())
+            return -1;
+        if (this.getDayOfYear() > cmp.getDayOfYear())
+            return 1;
+        if (this.getHour() < cmp.getHour())
+            return -1;
+        if (this.getHour() > cmp.getHour())
+            return 1;
+        if (this.getMinute() < cmp.getMinute())
+            return -1;
+        if (this.getMinute() > cmp.getMinute())
+            return 1;
+        if (this.getSecond() < cmp.getSecond())
+            return -1;
+        if (this.getSecond() > cmp.getSecond())
+            return 1;
+        
+        return 0;
+    }
+    
     public static int yToyyyy(int year) {
         if (year >= 2)
             return (year + 1960);
