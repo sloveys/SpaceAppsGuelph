@@ -47,8 +47,11 @@ public class AlouetteGUI extends JFrame {
         JPanel searchPanel = new JPanel();
         searchPanel.setLayout(new BoxLayout(searchPanel, BoxLayout.Y_AXIS));
         
-        JPanel satellitePanel = createTextPanel("Satellite: ");
-        searchPanel.add(satellitePanel);
+        String [] satellites = {"Alouette"};
+        JComboBox satelliteBox = new JComboBox(satellites);
+        searchPanel.add(satelliteBox);
+//        JPanel satellitePanel = createTextPanel("Satellite: ");
+//        searchPanel.add(satellitePanel);
 
         JDatePickerImpl startDatePicker = null;
         JSpinner startHoursSpinner = null, startMinutesSpinner = null, startSecondsSpinner = null;
@@ -60,11 +63,14 @@ public class AlouetteGUI extends JFrame {
         createDateTimePanel("End Date and Time: ", searchPanel, endDatePicker,
                 endHoursSpinner, endMinutesSpinner, endSecondsSpinner);
         
-        JPanel stationPanel = createTextPanel("Station: ");
-        searchPanel.add(stationPanel);
+        String [] stations = {"Resolute Bay, NWT","Prince Albert, AB","Ottawa, ON","St John's, NL","Fairbanks, USA","Fort Myers, USA","Quito, Ecuador","Antofagasta, Chile","Falkland Islands, UK","Winkfield, UK","Singapore, Malaysia","Woomera, AUS","Grand Forks, USA","Blossom Point, USA","South Point, USA","Johannesburg, SA","Mojave, USA","Winkfield, UK (2)","Fairbanks, USA (2)","Rosman, USA"};
+        JComboBox stationsBox = new JComboBox(stations);
+        searchPanel.add(stationsBox);
+        
             
         JButton searchButton = new JButton("Search");
         searchButton.setFont(FONT);
+        
         
         searchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
@@ -99,7 +105,8 @@ public class AlouetteGUI extends JFrame {
         });
         
         searchPanel.add(searchButton);
-        
+        searchPanel.add(Box.createRigidArea(new Dimension(10, 160)));
+
         return searchPanel;
     }
     
