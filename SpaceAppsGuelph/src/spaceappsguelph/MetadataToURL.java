@@ -6,6 +6,8 @@
 
 package spaceappsguelph;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Loveys
@@ -59,7 +61,6 @@ public class MetadataToURL {
         return tStamp.getSecond();
     }
     
-    
     private boolean satelliteIsValid(int x) {
         return (x == 1 || x == 2);
     }
@@ -72,4 +73,11 @@ public class MetadataToURL {
         return (!x.isEmpty());
     }
     
+    public boolean equals(Object other) {
+        MetadataToURL otherMtoU = (MetadataToURL)other;
+        return tStamp.equals(otherMtoU.tStamp)
+                && satellite == otherMtoU.satellite
+                && station == otherMtoU.station
+                && url.equals(otherMtoU.url);
+    }
 }
